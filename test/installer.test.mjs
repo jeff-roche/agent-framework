@@ -373,3 +373,27 @@ test("packs linked catalog content and installs after the source checkout and pa
     await temp.cleanup();
   }
 });
+
+test("includes canonical agent and skill sources in the package build", async () => {
+  const temp = await workspace();
+  try {
+    const output = join(temp.root, "packed");
+    await mkdir(output);
+    const environment = { ...process.env, npm_config_cache: join(temp.root, "npm-cache") };
+    execFileSync("npm", ["pack", "--pack-destination", output, "--silent"], {
+      cwd: repositoryRoot,
+      env: environment,
+      encoding: "utf8",
+    });
+    const [archive] = (await readdir(output)).filter((name) => name.endsWith(".tgz"));
+    assert.ok(archive);
+
+    const listing = execFileSync("tar", ["-tzf", join(output, archive)], { encoding: "utf8" });
+    assert.match(listing, /package\/agents\/software-engineer\.md/);
+    assert.match(listing, /package\/skills\/workflows\/bug-fix\.md/);
+    assert.match(listing, /package\/\.agent-framework-catalog\/toolkits\/swe\/agents\/software-engineer\.md/);
+    assert.match(listing, /package\/\.agent-framework-catalog\/toolkits\/swe\/skills\/bug-fix\/SKILL\.md/);
+  } finally {
+    await temp.cleanup();
+  }
+});
