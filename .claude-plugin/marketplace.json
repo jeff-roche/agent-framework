@@ -1,0 +1,31 @@
+{
+  "name": "agent-framework",
+  "description": "Skills and agent definitions for day-to-day engineering work.",
+  "owner": { "name": "Jeff Roche" },
+  "plugins": [
+    {
+      "name": "swe-toolkit",
+      "version": "0.1.3",
+      "source": "./toolkits/swe",
+      "description": "Skills and agent definitions for day-to-day software engineering work."
+    },
+    {
+      "name": "docs-toolkit",
+      "version": "0.1.4",
+      "source": "./toolkits/docs",
+      "description": "Skills and agent definitions for day-to-day documentation work."
+    },
+    {
+      "name": "quality-toolkit",
+      "version": "0.1.3",
+      "source": "./toolkits/quality",
+      "description": "Skills and agent definitions for day-to-day quality engineering work."
+    },
+    {
+      "name": "full-agent-framework",
+      "version": "0.1.2",
+      "source": "./toolkits/everything",
+      "description": "All skills, agent definitions, and workflows from the agent-framework."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "agent-framework",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Portable engineering skills, agents and utilities for coding environments.",
+  "type": "module",
+  "bin": {
+    "agent-framework": "bin/agent-framework.mjs"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "scripts/prepare-catalog.mjs",
+    ".agent-framework-catalog/"
+  ],
+  "scripts": {
+    "prepare": "node scripts/prepare-catalog.mjs",
+    "prepack": "node scripts/prepare-catalog.mjs",
+    "lint": "node scripts/lint.mjs",
+    "test": "node --test test/installer.test.mjs",
+    "doctor": "node bin/agent-framework.mjs doctor",
+    "validate:repository": "node scripts/validate-repository.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

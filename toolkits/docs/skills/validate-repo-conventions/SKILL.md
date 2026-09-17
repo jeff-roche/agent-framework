@@ -1,0 +1,1 @@
+../../../../skills/tasks/validate-repo-conventions.md

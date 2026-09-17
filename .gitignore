@@ -1,0 +1,4 @@
+node_modules/
+npm-debug.log*
+/.agent-framework-catalog/
+/.agent-framework-catalog-*/

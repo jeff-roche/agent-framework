@@ -1,0 +1,15 @@
+{
+  "name": "test-catalog",
+  "plugins": [
+    {
+      "name": "reviewer-toolkit",
+      "version": "1.0.0",
+      "source": "./reviewer-toolkit"
+    },
+    {
+      "name": "second-toolkit",
+      "version": "2.0.0",
+      "source": "./second-toolkit"
+    }
+  ]
+}

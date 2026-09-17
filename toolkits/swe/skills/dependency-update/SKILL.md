@@ -1,0 +1,1 @@
+../../../../skills/workflows/dependency-update.md

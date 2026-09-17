@@ -1,0 +1,64 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+    paths: [package.json]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm run lint
+      - run: npm test
+      - run: npm run doctor
+      - run: npm run validate:repository
+        env:
+          BASE_SHA: ${{ github.event.before }}
+      - run: npm pack --dry-run
+      - name: Derive release tag
+        id: version
+        run: node -p "'tag=v' + require('./package.json').version" >> "$GITHUB_OUTPUT"
+      - name: Verify release tag
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: node scripts/check-release-version.mjs "$TAG"
+      - name: Check for an existing tag
+        id: existing-tag
+        continue-on-error: true
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: git rev-parse --verify --quiet "refs/tags/$TAG"
+      - name: Create Git tag
+        if: steps.existing-tag.outcome == 'failure'
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          git tag "$TAG"
+          git push origin "$TAG"
+      - name: Check for an existing release
+        id: existing-release
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: gh release view "$TAG" --json id
+      - name: Create GitHub release
+        if: steps.existing-release.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: gh release create "$TAG" --generate-notes --title "$TAG"

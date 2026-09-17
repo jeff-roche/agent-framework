@@ -1,0 +1,5 @@
+/.claude/
+/.claude-plugin/
+/.github/
+.gitignore
+test/
