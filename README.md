@@ -11,17 +11,17 @@ Portable skills and specialized agents for day-to-day software engineering.
 
 ## Install
 
-Install directly from GitHub on macOS or Linux:
+Install a released package on macOS or Linux:
 
 ```bash
-npx github:jeff-roche/agent-framework install
+npx https://github.com/jeff-roche/agent-framework/releases/download/v<version>/agent-framework-<version>.tgz install
 ```
 
 The installer interactively selects environments, global or project scope, and
 whether to install skills, agents, or both. For scripting, provide every choice:
 
 ```bash
-npx github:jeff-roche/agent-framework install \
+npx https://github.com/jeff-roche/agent-framework/releases/download/v<version>/agent-framework-<version>.tgz install \
   --target claude-code,opencode,codex,cursor,vscode,zed \
   --plugins swe-toolkit \
   --scope global \
@@ -34,10 +34,10 @@ GitHub Copilot, and Zed. Zed receives portable skills. To use specialized
 agents inside Zed, run Claude Code, Codex, or OpenCode as a Zed ACP external
 agent.
 
-When a release exists, pin its tag for a repeatable installation:
+Use the release tarball for repeatable installations:
 
 ```bash
-npx github:jeff-roche/agent-framework#v<version> install
+npx https://github.com/jeff-roche/agent-framework/releases/download/v<version>/agent-framework-<version>.tgz install
 ```
 
 ### Install with `npx skills ...`
@@ -70,19 +70,19 @@ To receive a newer plugin version after the marketplace is updated:
 
 ```bash
 # Inspect the catalog.
-npx github:jeff-roche/agent-framework list
+npx https://github.com/jeff-roche/agent-framework/releases/download/v<version>/agent-framework-<version>.tgz list
 
 # Validate skill and agent metadata.
-npx github:jeff-roche/agent-framework doctor
+npx https://github.com/jeff-roche/agent-framework/releases/download/v<version>/agent-framework-<version>.tgz doctor
 
 # Update every installed plugin from the current catalog version.
-npx github:jeff-roche/agent-framework update
+npx https://github.com/jeff-roche/agent-framework/releases/download/v<version>/agent-framework-<version>.tgz update
 
 # Update one installed plugin only.
-npx github:jeff-roche/agent-framework update --plugins swe-toolkit
+npx https://github.com/jeff-roche/agent-framework/releases/download/v<version>/agent-framework-<version>.tgz update --plugins swe-toolkit
 
 # Remove catalog files owned by one target and scope.
-npx github:jeff-roche/agent-framework uninstall \
+npx https://github.com/jeff-roche/agent-framework/releases/download/v<version>/agent-framework-<version>.tgz uninstall \
   --target codex \
   --scope global \
   --yes
@@ -119,7 +119,7 @@ The plugin's own manifest intentionally has no `version`; `npm run doctor`
 enforces this convention. Marketplace entries expose those plugins through the
 native Claude Code marketplace, while the installer uses the same registry.
 
-For Git-based `npx` installs and npm packages, `prepare` and `prepack` build
+For npm package builds, `prepare` and `prepack` build
 `.agent-framework-catalog/` from the registered plugins. This ignored directory
 contains plain copies of linked content and the marketplace registry. Packages
 use that snapshot; local CLI runs use the live repository catalog. Do not edit
@@ -136,11 +136,23 @@ npm run validate:repository
 
 ## Releases
 
-The release workflow creates a `vX.Y.Z` tag and GitHub Release when a commit
-that changes `package.json` reaches `main`. It validates tests, catalog
-metadata, package contents, and the derived tag before generating release
-notes. A version that already has a tag or release is skipped safely.
+Push a `vX.Y.Z` tag to start the release workflow. It validates the tagged
+source, builds the package tarball, and attaches it to the GitHub Release.
+The release-tag commands below only apply the version tag and floating
+`latest` tag. GitHub Actions creates the release.
 
 ```bash
-# Update package.json to the intended version, then merge or push that commit to main.
+# Update package.json and commit it on main, then run the release-tag command.
+```
+
+In Claude Code, run:
+
+```text
+/release-tag <version>
+```
+
+In OpenCode, run:
+
+```text
+/release-tag <version>
 ```

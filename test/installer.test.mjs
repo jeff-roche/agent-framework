@@ -374,7 +374,7 @@ test("packs linked catalog content and installs after the source checkout and pa
   }
 });
 
-test("includes canonical agent and skill sources in the package build", async () => {
+test("includes the expanded catalog in the package build", async () => {
   const temp = await workspace();
   try {
     const output = join(temp.root, "packed");
@@ -389,8 +389,6 @@ test("includes canonical agent and skill sources in the package build", async ()
     assert.ok(archive);
 
     const listing = execFileSync("tar", ["-tzf", join(output, archive)], { encoding: "utf8" });
-    assert.match(listing, /package\/agents\/software-engineer\.md/);
-    assert.match(listing, /package\/skills\/workflows\/bug-fix\.md/);
     assert.match(listing, /package\/\.agent-framework-catalog\/toolkits\/swe\/agents\/software-engineer\.md/);
     assert.match(listing, /package\/\.agent-framework-catalog\/toolkits\/swe\/skills\/bug-fix\/SKILL\.md/);
   } finally {

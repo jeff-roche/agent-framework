@@ -1,6 +1,6 @@
 {
   "name": "agent-framework",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "description": "Portable engineering skills, agents and utilities for coding environments.",
   "type": "module",
@@ -11,10 +11,7 @@
     "bin/",
     "lib/",
     "scripts/prepare-catalog.mjs",
-    ".agent-framework-catalog/",
-    "agents/",
-    "skills/",
-    "toolkits/"
+    ".agent-framework-catalog/"
   ],
   "scripts": {
     "prepare": "node scripts/prepare-catalog.mjs",
