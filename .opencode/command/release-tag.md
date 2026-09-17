@@ -3,7 +3,7 @@ description: Apply the version and latest Git tags after a release commit reache
 agent: build
 ---
 
-Apply the release tags for the version passed in `$ARGUMENTS`.
+Read the release version from `package.json`, then apply the release tags.
 
 The package version must already be updated and committed on `main`. Do not
 create a GitHub release. The GitHub Actions workflow does that after the
@@ -13,8 +13,7 @@ Run these checks and commands:
 
 ```bash
 set -eu
-VERSION="$ARGUMENTS"
-VERSION="${VERSION#v}"
+VERSION="$(node -p "require('./package.json').version")"
 TAG="v$VERSION"
 
 test "$(git branch --show-current)" = "main"

@@ -145,14 +145,14 @@ The release-tag commands below only apply the version tag and floating
 # Update package.json and commit it on main, then run the release-tag command.
 ```
 
-In Claude Code, run:
+In Claude Code, run this after updating `package.json`:
 
 ```text
-/release-tag <version>
+/release-tag
 ```
 
 In OpenCode, run:
 
 ```text
-/release-tag <version>
+/release-tag
 ```
