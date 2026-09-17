@@ -1,6 +1,6 @@
 {
   "name": "agent-framework",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "description": "Portable engineering skills, agents and utilities for coding environments.",
   "type": "module",

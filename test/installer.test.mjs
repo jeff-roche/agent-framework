@@ -87,6 +87,31 @@ test("installs portable skills and adapted agents for every target", async () =>
   }
 });
 
+test("shares identical skills across plugins and keeps them until all owners are removed", async () => {
+  const temp = await workspace();
+  try {
+    const root = join(temp.root, "catalog");
+    await cp(catalogRoot, root, { recursive: true });
+    await mkdir(join(root, "second-toolkit", "skills"), { recursive: true });
+    await cp(
+      join(root, "reviewer-toolkit", "skills", "example-skill"),
+      join(root, "second-toolkit", "skills", "example-skill"),
+      { recursive: true },
+    );
+
+    await install(options(temp, { catalogRoot: root, targets: ["claude-code"], components: "skills" }));
+    const installedSkill = join(temp.home, ".claude", "skills", "example-skill", "SKILL.md");
+    await readFile(installedSkill);
+
+    await uninstall(options(temp, { catalogRoot: root, targets: ["claude-code"], components: "skills", plugins: ["reviewer-toolkit"] }));
+    await readFile(installedSkill);
+    await uninstall(options(temp, { catalogRoot: root, targets: ["claude-code"], components: "skills", plugins: ["second-toolkit"] }));
+    await assert.rejects(readFile(installedSkill));
+  } finally {
+    await temp.cleanup();
+  }
+});
+
 test("does not overwrite a modified installed item without force", async () => {
   const temp = await workspace();
   try {
