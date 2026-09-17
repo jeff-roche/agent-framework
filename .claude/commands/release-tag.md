@@ -18,7 +18,10 @@ test -z "$(git status --short)"
 test "$(node -p "require('./package.json').version")" = "$VERSION"
 git fetch origin main --tags
 test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
-git show-ref --verify --quiet "refs/tags/$TAG" && exit 1 || true
+if git show-ref --verify --quiet "refs/tags/$TAG"; then
+  echo "tag $TAG already exists" >&2
+  exit 1
+fi
 
 git tag -a "$TAG" -m "Release $TAG"
 git push origin "$TAG"
